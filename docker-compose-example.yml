@@ -1,0 +1,36 @@
+version: '2'
+services:
+  elasticsearch:
+    image: elasticsearch
+#    volumes:
+#      - /var/docker/elasticsearch/data:/usr/share/elasticsearch/data
+
+  logstash:
+    image: logstash
+    volumes:
+      - $PWD/conf:/conf
+    command: logstash -f /conf/logstash.conf
+
+  kibana:
+    image: kibana
+    links:
+      - elasticsearch
+    command: kibana -e http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+
+  web:
+    build: .
+    volumes:
+      - $PWD/logs:/logs
+      - $PWD:/opt/my_django_project
+    links:
+      - logstash
+    ports:
+      - "8080:8080"
+    depends_on:
+      - elasticsearch
+      - logstash
+      - kibana
+    command: bash -c "service filebeat start && python3 ./manage.py runserver 0.0.0.0:8080"
+

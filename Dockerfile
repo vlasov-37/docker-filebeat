@@ -13,10 +13,10 @@ RUN curl -L -O https://download.elastic.co/beats/filebeat/filebeat_1.0.1_amd64.d
  && rm filebeat_1.0.1_amd64.deb
 
 
-ADD filebeat.yml /etc/filebeat/filebeat-default.yml
+ADD filebeat.yml /etc/filebeat/filebeat.yml
 
 
-CMD test "$(ls /conf/filebeat.yml)" || cp /etc/filebeat/filebeat-default.yml /conf/filebeat.yml; \
+CMD test "$(ls /conf/filebeat.yml)" || cp /etc/filebeat/filebeat.yml /conf/filebeat.yml; \
     rm /etc/filebeat/filebeat.yml; ln -s /conf/filebeat.yml /etc/filebeat/filebeat.yml; \
     service filebeat start; \
     sleep 2;\

@@ -1,0 +1,14 @@
+version: '2'
+services:
+  filebeat:
+    build: .
+    volumes:
+      - /var/docker/filebeat/logs:/logs
+      - $PWD/local_conf:/conf
+    external_links:
+      - elk-server:elk-server
+
+networks:
+  default:
+    external:
+      name: dockerelkserver_default

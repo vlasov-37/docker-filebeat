@@ -1,0 +1,20 @@
+output:
+  logstash:
+    enabled: true
+    hosts:
+      - elk-server:5044
+    timeout: 15
+
+filebeat:
+  prospectors:
+    -
+      paths:
+        - /logs/*.log
+      document_type: json_log
+logging:
+  files:
+    path: /var/log
+    rotateeverybytes: 10485760 # = 10MB
+  to_files: true
+  to_syslog: false
+  level:  info
